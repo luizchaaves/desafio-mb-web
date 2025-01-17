@@ -4,12 +4,16 @@ defineProps({
     type: Number,
     required: true,
   },
+  totalStep: {
+    type: Number,
+    required: true,
+  },
 })
 </script>
 
 <template>
   <p>
-    Etapa <span>{{ step }}</span> de 4
+    Etapa <span>{{ step }}</span> de {{ totalStep }}
   </p>
 </template>
 
