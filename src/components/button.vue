@@ -49,8 +49,8 @@ button {
   font-size: $font-size-sm;
   cursor: pointer;
   transition: background-color 0.25s;
-  width: 100%;
   overflow: hidden;
+  font-weight: $font-weight-semibold;
 
   &.primary {
     border: 1px solid transparent;
