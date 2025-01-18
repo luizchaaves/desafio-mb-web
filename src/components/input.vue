@@ -37,14 +37,16 @@ watch(
 <template>
   <div class="input-container">
     <label v-if="label" :for="id">{{ label }}</label>
-    <input
-      v-bind="$attrs"
-      :id="id"
-      :type="type"
-      v-model="model"
-      :class="inputClasses"
-    />
-    <span v-if="error" class="input-error">{{ error }}</span>
+    <div class="input-content">
+      <input
+        v-bind="$attrs"
+        :id="id"
+        :type="type"
+        v-model="model"
+        :class="inputClasses"
+      />
+      <span v-if="error" class="input-error">{{ error }}</span>
+    </div>
   </div>
 </template>
 
@@ -53,6 +55,11 @@ watch(
   display: flex;
   flex-direction: column;
   gap: $spacing-xs;
+
+  & > .input-content {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 input {
@@ -69,7 +76,7 @@ input {
   &.error:focus {
     outline: none;
     border-color: transparent;
-    box-shadow: 0 0 2px 1px $color-orange;
+    box-shadow: $box-shadow-orange;
   }
 
   &.error {
@@ -83,6 +90,5 @@ input {
   font-size: $font-size-sm;
   color: $color-error;
   font-weight: $font-weight-semibold;
-  padding: 0px $spacing-sm;
 }
 </style>
