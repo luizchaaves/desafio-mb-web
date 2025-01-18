@@ -51,14 +51,17 @@ button {
   transition: background-color 0.25s;
   overflow: hidden;
   font-weight: $font-weight-semibold;
+  min-width: 100px;
 
   &.primary {
     border: 1px solid transparent;
     background-color: $color-orange;
     color: $color-white;
+    transition: box-shadow 0.25s;
 
     &:not(.disabled):hover {
       background-color: $color-orange-hover;
+      box-shadow: $box-shadow-orange;
     }
   }
 
@@ -66,9 +69,12 @@ button {
     border: 1px solid $color-orange;
     background-color: $color-white;
     color: $color-orange;
+    transition: box-shadow 0.25s, border-color 0.25s;
 
     &:not(.disabled):hover {
       background-color: rgba($color: #000000, $alpha: 0.04);
+      border-color: transparent;
+      box-shadow: $box-shadow-orange;
     }
   }
 
