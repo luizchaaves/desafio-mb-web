@@ -24,7 +24,7 @@ const onSubmit = () => {
 form {
   display: flex;
   flex-direction: column;
-  gap: $spacing-lg;
+  gap: $spacing-xl;
 
   & > .form-content {
     display: flex;

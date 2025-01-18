@@ -57,7 +57,7 @@ button {
     border: 1px solid transparent;
     background-color: $color-orange;
     color: $color-white;
-    transition: box-shadow 0.25s;
+    transition: background-color 0.25s, box-shadow 0.25s;
 
     &:not(.disabled):hover {
       background-color: $color-orange-hover;
@@ -69,7 +69,7 @@ button {
     border: 1px solid $color-orange;
     background-color: $color-white;
     color: $color-orange;
-    transition: box-shadow 0.25s, border-color 0.25s;
+    transition: background-color 0.25s, box-shadow 0.25s, border-color 0.25s;
 
     &:not(.disabled):hover {
       background-color: rgba($color: #000000, $alpha: 0.04);
