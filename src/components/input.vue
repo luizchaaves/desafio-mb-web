@@ -1,10 +1,11 @@
 <script setup>
 import { computed, defineEmits, ref, watch } from "vue"
+import { randomStringGenerator } from "../utils/helpers"
 
 const props = defineProps({
   id: {
     type: String,
-    default: () => `input-${Math.random().toString(36).substring(2, 9)}`,
+    default: () => `input-${randomStringGenerator()}`,
   },
   label: String,
   modelValue: {
