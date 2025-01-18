@@ -7,8 +7,16 @@
   background-color: $color-white;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0px;
+  min-height: 100vh;
+}
+
+#app {
   min-height: 100vh;
 }
 
