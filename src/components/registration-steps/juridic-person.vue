@@ -22,22 +22,15 @@ const emit = defineEmits(["updateRegistrationData", "prevStep", "nextStep"])
 const formIsValid = computed(
   () =>
     Boolean(
-      formData.cnpj &&
-        formData.company &&
-        formData.openingDate &&
-        formData.phone
+      props.registrationData.cnpj &&
+        props.registrationData.company &&
+        props.registrationData.openingDate &&
+        props.registrationData.phone
     ) &&
     isValid.cnpj &&
     isValid.date &&
     isValid.phone
 )
-
-const formData = reactive({
-  company: props.registrationData.company,
-  cnpj: props.registrationData.cnpj,
-  openingDate: props.registrationData.openingDate,
-  phone: props.registrationData.phone,
-})
 
 const isValid = reactive({
   cnpj: true,
@@ -45,52 +38,62 @@ const isValid = reactive({
   phone: true,
 })
 
-const handleCnpj = () => (formData.cnpj = formatCnpj(formData.cnpj))
-const handlePhone = () => (formData.phone = formatPhone(formData.phone))
-const handleDate = () =>
-  (formData.openingDate = formatDate(formData.openingDate))
-
-const handleSubmit = () => {
-  if (formIsValid.value) {
-    const data = { ...formData, name: "", cpf: "", birthdate: "" }
-    emit("updateRegistrationData", data)
-    emit("nextStep")
-  }
+const handleCnpj = () => {
+  props.registrationData.cnpj = formatCnpj(props.registrationData.cnpj)
 }
 
-const handleBack = () => {
-  formData.company = props.registrationData.company
-  formData.cnpj = props.registrationData.cnpj
-  formData.openingDate = props.registrationData.openingDate
-  formData.phone = props.registrationData.phone
-  emit("updateRegistrationData", formData)
-  emit("prevStep")
+const handlePhone = () => {
+  props.registrationData.phone = formatPhone(props.registrationData.phone)
+}
+
+const handleDate = () => {
+  props.registrationData.openingDate = formatDate(
+    props.registrationData.openingDate
+  )
 }
 
 const onChangeValidateCnpj = () => {
-  isValid.cnpj = validateCnpj(formData.cnpj)
+  isValid.cnpj = validateCnpj(props.registrationData.cnpj)
 }
 
 const onChangeValidateDate = () => {
-  isValid.date = validateDate(formData.openingDate)
+  isValid.date = validateDate(props.registrationData.openingDate)
 }
 
 const onChangeValidatePhone = () => {
-  isValid.phone = validatePhone(formData.phone)
+  isValid.phone = validatePhone(props.registrationData.phone)
+}
+
+const clearPhysicsPersonData = () => {
+  props.registrationData.cnpj = ""
+  props.registrationData.company = ""
+  props.registrationData.openingDate = ""
+}
+
+const handleSubmit = () => {
+  if (formIsValid.value) {
+    clearPhysicsPersonData()
+    emit("nextStep")
+  }
 }
 </script>
 
 <template>
   <Form @submit="handleSubmit">
-    <pre>{{ formIsValid }}</pre>
-    <Input label="Razão social" type="text" v-model="formData.company" />
+    <Input
+      label="Razão social"
+      type="text"
+      v-model="props.registrationData.company"
+    />
     <Input
       label="CNPJ"
       type="text"
       :maxlength="18"
       inputmode="numeric"
-      :error="!isValid.cnpj && formData.cnpj ? 'cnpj inválido' : ''"
-      v-model="formData.cnpj"
+      :error="
+        !isValid.cnpj && props.registrationData.cnpj ? 'cnpj inválido' : ''
+      "
+      v-model="props.registrationData.cnpj"
       @keyup="handleCnpj"
       @change="onChangeValidateCnpj"
     />
@@ -100,9 +103,11 @@ const onChangeValidatePhone = () => {
       :maxlength="10"
       inputmode="numeric"
       :error="
-        !isValid.date && formData.openingDate ? 'data de abertura inválida' : ''
+        !isValid.date && props.registrationData.openingDate
+          ? 'data de abertura inválida'
+          : ''
       "
-      v-model="formData.openingDate"
+      v-model="props.registrationData.openingDate"
       @keyup="handleDate"
       @change="onChangeValidateDate"
     />
@@ -111,8 +116,12 @@ const onChangeValidatePhone = () => {
       type="tel"
       :maxlength="15"
       inputmode="tel"
-      :error="!isValid.phone && formData.phone ? 'telefone inválido' : ''"
-      v-model="formData.phone"
+      :error="
+        !isValid.phone && props.registrationData.phone
+          ? 'telefone inválido'
+          : ''
+      "
+      v-model="props.registrationData.phone"
       @keyup="handlePhone"
       @change="onChangeValidatePhone"
     />
@@ -123,7 +132,7 @@ const onChangeValidatePhone = () => {
         stretched
         label="Voltar"
         color="secondary"
-        @click="handleBack"
+        @click="() => emit('prevStep')"
       />
       <Button
         type="submit"

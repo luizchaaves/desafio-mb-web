@@ -17,15 +17,13 @@ const props = defineProps({
 const emit = defineEmits(["updateRegistrationData", "nextStep"])
 
 const formIsValid = computed(
-  () => Boolean(formData.email && formData.personType) && emailIsValid.value
+  () =>
+    Boolean(
+      props.registrationData.email && props.registrationData.personType
+    ) && emailIsValid.value
 )
 
 const emailIsValid = ref(true)
-
-const formData = reactive({
-  email: props.registrationData.email,
-  personType: props.registrationData.personType,
-})
 
 const personTypes = reactive([
   {
@@ -41,12 +39,11 @@ const personTypes = reactive([
 ])
 
 const onChangeValidateEmail = () => {
-  emailIsValid.value = validateEmail(formData.email)
+  emailIsValid.value = validateEmail(props.registrationData.email)
 }
 
 const handleSubmit = () => {
   if (formIsValid.value) {
-    emit("updateRegistrationData", formData)
     emit("nextStep")
   }
 }
@@ -58,8 +55,10 @@ const handleSubmit = () => {
       label="Endereço de e-mail"
       type="text"
       inputmode="email"
-      :error="!emailIsValid && formData.email ? 'e-mail inválido' : ''"
-      v-model="formData.email"
+      :error="
+        !emailIsValid && props.registrationData.email ? 'e-mail inválido' : ''
+      "
+      v-model="props.registrationData.email"
       @change="onChangeValidateEmail"
     />
     <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
@@ -68,7 +67,7 @@ const handleSubmit = () => {
         :key="type.id"
         :label="type.label"
         :value="type.value"
-        v-model="formData.personType"
+        v-model="props.registrationData.personType"
       />
     </div>
 

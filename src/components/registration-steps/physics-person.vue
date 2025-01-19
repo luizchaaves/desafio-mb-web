@@ -22,19 +22,15 @@ const emit = defineEmits(["updateRegistrationData", "prevStep", "nextStep"])
 const formIsValid = computed(
   () =>
     Boolean(
-      formData.name && formData.cpf && formData.birthdate && formData.phone
+      props.registrationData.name &&
+        props.registrationData.cpf &&
+        props.registrationData.birthdate &&
+        props.registrationData.phone
     ) &&
     isValid.cpf &&
     isValid.date &&
     isValid.phone
 )
-
-const formData = reactive({
-  name: props.registrationData.name,
-  cpf: props.registrationData.cpf,
-  birthdate: props.registrationData.birthdate,
-  phone: props.registrationData.phone,
-})
 
 const isValid = reactive({
   cpf: true,
@@ -42,51 +38,56 @@ const isValid = reactive({
   phone: true,
 })
 
-const handleCpf = () => (formData.cpf = formatCpf(formData.cpf))
-const handlePhone = () => (formData.phone = formatPhone(formData.phone))
-const handleBirthdate = () =>
-  (formData.birthdate = formatDate(formData.birthdate))
-
-const handleSubmit = () => {
-  if (formIsValid.value) {
-    const data = { ...formData, company: "", cnpj: "", openingDate: "" }
-    emit("updateRegistrationData", data)
-    emit("nextStep")
-  }
-}
-
-const handleBack = () => {
-  formData.name = props.registrationData.name
-  formData.cpf = props.registrationData.cpf
-  formData.birthdate = props.registrationData.birthdate
-  formData.phone = props.registrationData.phone
-  emit("updateRegistrationData", formData)
-  emit("prevStep")
-}
-
 const onChangeValidateCpf = () => {
-  isValid.cpf = validateCpf(formData.cpf)
+  isValid.cpf = validateCpf(props.registrationData.cpf)
 }
 
 const onChangeValidateDate = () => {
-  isValid.date = validateDate(formData.birthdate)
+  isValid.date = validateDate(props.registrationData.birthdate)
 }
 
 const onChangeValidatePhone = () => {
-  isValid.phone = validatePhone(formData.phone)
+  isValid.phone = validatePhone(props.registrationData.phone)
+}
+
+const handleCpf = () => {
+  props.registrationData.cpf = formatCpf(props.registrationData.cpf)
+}
+
+const handlePhone = () => {
+  props.registrationData.phone = formatPhone(props.registrationData.phone)
+}
+
+const handleBirthdate = () => {
+  props.registrationData.birthdate = formatDate(
+    props.registrationData.birthdate
+  )
+}
+
+const clearJuridicPersonData = () => {
+  props.registrationData.cnpj = ""
+  props.registrationData.company = ""
+  props.registrationData.openingDate = ""
+}
+
+const handleSubmit = () => {
+  if (formIsValid.value) {
+    clearJuridicPersonData()
+    emit("nextStep")
+  }
 }
 </script>
 
 <template>
   <Form @submit="handleSubmit">
-    <Input label="Nome" type="text" v-model="formData.name" />
+    <Input label="Nome" type="text" v-model="props.registrationData.name" />
     <Input
       label="CPF"
       type="text"
       :maxlength="14"
       inputmode="numeric"
-      :error="!isValid.cpf && formData.cpf ? 'cpf inválido' : ''"
-      v-model="formData.cpf"
+      :error="!isValid.cpf && props.registrationData.cpf ? 'cpf inválido' : ''"
+      v-model="props.registrationData.cpf"
       @keyup="handleCpf"
       @change="onChangeValidateCpf"
     />
@@ -96,9 +97,11 @@ const onChangeValidatePhone = () => {
       :maxlength="10"
       inputmode="numeric"
       :error="
-        !isValid.date && formData.birthdate ? 'data de nascimento inválida' : ''
+        !isValid.date && props.registrationData.birthdate
+          ? 'data de nascimento inválida'
+          : ''
       "
-      v-model="formData.birthdate"
+      v-model="props.registrationData.birthdate"
       @keyup="handleBirthdate"
       @change="onChangeValidateDate"
     />
@@ -107,8 +110,12 @@ const onChangeValidatePhone = () => {
       type="tel"
       :maxlength="15"
       inputmode="tel"
-      :error="!isValid.phone && formData.phone ? 'telefone inválido' : ''"
-      v-model="formData.phone"
+      :error="
+        !isValid.phone && props.registrationData.phone
+          ? 'telefone inválido'
+          : ''
+      "
+      v-model="props.registrationData.phone"
       @keyup="handlePhone"
       @change="onChangeValidatePhone"
     />
@@ -119,7 +126,7 @@ const onChangeValidatePhone = () => {
         stretched
         label="Voltar"
         color="secondary"
-        @click="handleBack"
+        @click="() => emit('prevStep')"
       />
       <Button
         type="submit"
