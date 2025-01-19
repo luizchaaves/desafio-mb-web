@@ -1,6 +1,7 @@
 <script setup>
-import { reactive } from "vue"
+import { computed, reactive, ref } from "vue"
 import { randomStringGenerator } from "../../utils/helpers"
+import { validateEmail } from "../../utils/validators"
 import Form from "../form.vue"
 import Input from "../input.vue"
 import Radio from "../radio.vue"
@@ -14,6 +15,12 @@ const props = defineProps({
 })
 
 const emit = defineEmits(["updateRegistrationData", "nextStep"])
+
+const formIsValid = computed(
+  () => Boolean(formData.email && formData.personType) && emailIsValid.value
+)
+
+const emailIsValid = ref(true)
 
 const formData = reactive({
   email: props.registrationData.email,
@@ -33,9 +40,15 @@ const personTypes = reactive([
   },
 ])
 
+const onChangeValidateEmail = () => {
+  emailIsValid.value = validateEmail(formData.email)
+}
+
 const handleSubmit = () => {
-  emit("updateRegistrationData", formData)
-  emit("nextStep")
+  if (formIsValid.value) {
+    emit("updateRegistrationData", formData)
+    emit("nextStep")
+  }
 }
 </script>
 
@@ -45,7 +58,9 @@ const handleSubmit = () => {
       label="Endereço de e-mail"
       type="text"
       inputmode="email"
+      :error="!emailIsValid && formData.email ? 'e-mail inválido' : ''"
       v-model="formData.email"
+      @change="onChangeValidateEmail"
     />
     <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
       <Radio
@@ -58,7 +73,12 @@ const handleSubmit = () => {
     </div>
 
     <template #buttons>
-      <Button type="submit" stretched label="Continuar" :disabled="false" />
+      <Button
+        type="submit"
+        stretched
+        label="Continuar"
+        :disabled="!formIsValid"
+      />
     </template>
   </Form>
 </template>
