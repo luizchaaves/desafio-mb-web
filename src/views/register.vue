@@ -56,6 +56,13 @@ const updateStoredSteps = () => {
   localStorage.setItem("mbResistrationSteps", JSON.stringify(steps))
 }
 
+const submitRegistration = () => {
+  steps.current = 1
+  Object.keys(registrationData).forEach((key) => {
+    registrationData[key] = ""
+  })
+}
+
 watch(registrationData, () => updateStoredData())
 
 watch(steps, () => updateStoredSteps())
@@ -113,6 +120,7 @@ onMounted(() => {
           v-else-if="steps.current === 4"
           :registration-data="registrationData"
           @prevStep="steps.current--"
+          @submitRegistration="submitRegistration"
         />
       </div>
     </div>

@@ -24,7 +24,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(["prevStep"])
+const emit = defineEmits(["prevStep", "submitRegistration"])
 
 const isPhysicsPerson = computed(
   () => props.registrationData.personType === "pp"
@@ -122,6 +122,7 @@ const handleOpeningDate = () => {
 
 const handleRegistration = () => {
   if (formIsValid.value) {
+    emit("submitRegistration")
   }
 }
 </script>
