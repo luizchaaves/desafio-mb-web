@@ -65,9 +65,9 @@ const onChangeValidatePhone = () => {
 }
 
 const clearPhysicsPersonData = () => {
-  props.registrationData.cnpj = ""
-  props.registrationData.company = ""
-  props.registrationData.openingDate = ""
+  props.registrationData.cpf = ""
+  props.registrationData.name = ""
+  props.registrationData.birthdate = ""
 }
 
 const handleSubmit = () => {
