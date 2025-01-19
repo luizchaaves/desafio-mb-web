@@ -1,110 +1,88 @@
 <script setup>
-import { computed, reactive } from "vue"
-import {
-  formatDate,
-  formatPhone,
-  formatCpf,
-  formatCnpj,
-} from "../../utils/masks"
+import { computed } from "vue"
 import Form from "../form.vue"
 import Input from "../input.vue"
 import Button from "../button.vue"
 
-const formData = reactive({
-  email: "",
-  type: "pp",
-  name: "",
-  cpf: "",
-  birthdate: "",
-  phone: "",
-  company: "",
-  cnpj: "",
-  openingDate: "",
-  password: "",
+const props = defineProps({
+  registrationData: {
+    type: Object,
+    required: true,
+  },
 })
 
-const isPhysicsPerson = computed(() => formData.type === "pp")
+const emit = defineEmits(["prevStep"])
 
-const handleCpf = () => (formData.cpf = formatCpf(formData.cpf))
-const handleCnpj = () => (formData.cnpj = formatCnpj(formData.cnpj))
-const handlePhone = () => (formData.phone = formatPhone(formData.phone))
-const handleBirthdate = () =>
-  (formData.birthdate = formatDate(formData.birthdate))
+const isPhysicsPerson = computed(
+  () => props.registrationData.personType === "pp"
+)
+
+const handleRegistration = () => {}
+
+const handleBack = () => {
+  emit("prevStep")
+}
 </script>
 
 <template>
   <Form>
     <Input
+      disabled
       label="Endereço de e-mail"
-      type="email"
-      inputmode="email"
-      v-model="formData.email"
+      v-model="props.registrationData.email"
     />
 
     <Input
       v-if="isPhysicsPerson"
+      disabled
       label="Nome"
-      type="text"
-      v-model="formData.name"
+      v-model="props.registrationData.name"
     />
-    <Input v-else label="Razão social" type="text" v-model="formData.company" />
+    <Input
+      v-else
+      disabled
+      label="Razão social"
+      v-model="props.registrationData.company"
+    />
 
     <Input
       v-if="isPhysicsPerson"
+      disabled
       label="CPF"
-      type="text"
-      :maxlength="14"
-      inputmode="numeric"
-      v-model="formData.cpf"
-      @keyup="handleCpf"
+      v-model="props.registrationData.cpf"
     />
-    <Input
-      v-else
-      label="CNPJ"
-      type="text"
-      :maxlength="18"
-      inputmode="numeric"
-      v-model="formData.cnpj"
-      @keyup="handleCnpj"
-    />
+    <Input v-else disabled label="CNPJ" v-model="props.registrationData.cnpj" />
 
     <Input
       v-if="isPhysicsPerson"
+      disabled
       label="Data de nascimento"
-      type="text"
-      :maxlength="10"
-      inputmode="numeric"
-      v-model="formData.birthdate"
-      @keyup="handleBirthdate"
+      v-model="props.registrationData.birthdate"
     />
     <Input
       v-else
+      disabled
       label="Data de abertura"
-      type="text"
-      :maxlength="10"
-      inputmode="numeric"
-      v-model="formData.openingDate"
-      @keyup="handleDate"
+      v-model="props.registrationData.openingDate"
     />
+
+    <Input label="Telefone" disabled v-model="props.registrationData.phone" />
 
     <Input
-      label="Telefone"
-      type="tel"
-      :maxlength="15"
-      inputmode="tel"
-      v-model="formData.phone"
-      @keyup="handlePhone"
+      label="Senha"
+      disabled
+      type="password"
+      v-model="props.registrationData.password"
     />
-
-    <Input label="Senha" type="password" v-model="formData.password" />
 
     <template #buttons>
       <Button
-        type="submit"
+        type="button"
         stretched
         label="Voltar"
         color="secondary"
         :disabled="false"
+        @click="handleBack"
       />
       <Button type="submit" stretched label="Continuar" :disabled="false" />
     </template>

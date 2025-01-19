@@ -6,9 +6,18 @@ import Input from "../input.vue"
 import Radio from "../radio.vue"
 import Button from "../button.vue"
 
+const props = defineProps({
+  registrationData: {
+    type: Object,
+    required: true,
+  },
+})
+
+const emit = defineEmits(["updateRegistrationData", "nextStep"])
+
 const formData = reactive({
-  email: "",
-  type: "",
+  email: props.registrationData.email,
+  personType: props.registrationData.personType,
 })
 
 const personTypes = reactive([
@@ -23,13 +32,18 @@ const personTypes = reactive([
     value: "jp",
   },
 ])
+
+const handleSubmit = () => {
+  emit("updateRegistrationData", formData)
+  emit("nextStep")
+}
 </script>
 
 <template>
-  <Form>
+  <Form @submit="handleSubmit">
     <Input
       label="Endereço de e-mail"
-      type="email"
+      type="text"
       inputmode="email"
       v-model="formData.email"
     />
@@ -39,7 +53,7 @@ const personTypes = reactive([
         :key="type.id"
         :label="type.label"
         :value="type.value"
-        v-model="formData.type"
+        v-model="formData.personType"
       />
     </div>
 
