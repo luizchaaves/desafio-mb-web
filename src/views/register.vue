@@ -61,19 +61,19 @@ watch(registrationData, () => updateStoredData())
 watch(steps, () => updateStoredSteps())
 
 onMounted(() => {
-  registrationData.email = storedData.value.email ?? ""
-  registrationData.personType = storedData.value.personType ?? ""
-  registrationData.name = storedData.value.name ?? ""
-  registrationData.cpf = storedData.value.cpf ?? ""
-  registrationData.birthdate = storedData.value.birthdate ?? ""
-  registrationData.phone = storedData.value.phone ?? ""
-  registrationData.company = storedData.value.company ?? ""
-  registrationData.cnpj = storedData.value.cnpj ?? ""
-  registrationData.openingDate = storedData.value.openingDate ?? ""
-  registrationData.password = storedData.value.password ?? ""
+  registrationData.email = storedData.value?.email ?? ""
+  registrationData.personType = storedData.value?.personType ?? ""
+  registrationData.name = storedData.value?.name ?? ""
+  registrationData.cpf = storedData.value?.cpf ?? ""
+  registrationData.birthdate = storedData.value?.birthdate ?? ""
+  registrationData.phone = storedData.value?.phone ?? ""
+  registrationData.company = storedData.value?.company ?? ""
+  registrationData.cnpj = storedData.value?.cnpj ?? ""
+  registrationData.openingDate = storedData.value?.openingDate ?? ""
+  registrationData.password = storedData.value?.password ?? ""
 
-  steps.current = storedSteps.value.current ?? 1
-  steps.total = storedSteps.value.total ?? 4
+  steps.current = storedSteps.value?.current ?? 1
+  steps.total = storedSteps.value?.total ?? 4
 })
 </script>
 
