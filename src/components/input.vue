@@ -83,6 +83,13 @@ input {
   &.error {
     border-color: $color-error;
   }
+
+  &:disabled,
+  &:disabled:hover,
+  &:disabled:focus {
+    box-shadow: none;
+    border-color: rgba(118, 118, 118, 0.3);
+  }
 }
 
 .input-error {
