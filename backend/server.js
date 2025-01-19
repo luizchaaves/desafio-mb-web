@@ -3,6 +3,9 @@ const path = require("path")
 const fs = require("fs")
 const { exec } = require("child_process")
 
+const registrationValidation = require("./middleware/registration-middleware")
+const registrationController = require("./controller/registration-controller")
+
 const app = express()
 const port = 3000
 
@@ -37,15 +40,14 @@ const buildFrontend = async () => {
 
 buildFrontend()
   .then(() => {
+    app.use(express.json())
     app.use(express.static(distDir))
 
     app.get("/registration", (req, res) => {
       res.sendFile(path.join(distDir, "index.html"))
     })
 
-    app.post("/registration", (req, res) => {
-      return res.status(200).json({ message: "Cadastro realizado com sucesso" })
-    })
+    app.post("/registration", registrationValidation, registrationController)
 
     app.listen(port, () => {
       console.log(`Servidor iniciado na porta ${port}`)
