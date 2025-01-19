@@ -1,5 +1,5 @@
 <script setup>
-import { defineEmits, useSlots } from "vue"
+import { useSlots } from "vue"
 
 const emit = defineEmits(["submit"])
 const slots = useSlots()

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineEmits, reactive } from "vue"
+import { computed, reactive } from "vue"
 import { formatDate, formatCnpj, formatPhone } from "../../utils/masks"
 import {
   validateCnpj,

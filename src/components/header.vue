@@ -1,5 +1,5 @@
 <script setup>
-import logo from "../../public/mb.svg"
+import logo from "../assets/mb.svg"
 import Steps from "./steps.vue"
 import Title from "./title.vue"
 
