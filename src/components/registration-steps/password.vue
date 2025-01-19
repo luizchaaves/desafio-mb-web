@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue"
+import { computed, ref } from "vue"
 import Form from "../form.vue"
 import Input from "../input.vue"
 import Button from "../button.vue"
@@ -13,11 +13,15 @@ const props = defineProps({
 
 const emit = defineEmits(["updateRegistrationData", "prevStep", "nextStep"])
 
+const formIsValid = computed(() => Boolean(password.value))
+
 const password = ref(props.registrationData.password)
 
 const handleSubmit = () => {
-  emit("updateRegistrationData", { password: password.value })
-  emit("nextStep")
+  if (formIsValid) {
+    emit("updateRegistrationData", { password: password.value })
+    emit("nextStep")
+  }
 }
 
 const handleBack = () => {
@@ -37,10 +41,14 @@ const handleBack = () => {
         stretched
         label="Voltar"
         color="secondary"
-        :disabled="false"
         @click="handleBack"
       />
-      <Button type="submit" stretched label="Continuar" :disabled="false" />
+      <Button
+        type="submit"
+        stretched
+        label="Continuar"
+        :disabled="!formIsValid"
+      />
     </template>
   </Form>
 </template>
