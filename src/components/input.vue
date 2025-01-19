@@ -22,6 +22,7 @@ const props = defineProps({
 const emit = defineEmits("update:modelValue")
 
 const inputClasses = computed(() => ({
+  input: true,
   error: props.error,
 }))
 
@@ -46,7 +47,7 @@ watch(
         v-model="model"
         :class="inputClasses"
       />
-      <span v-if="error" class="input-error">{{ error }}</span>
+      <span v-if="error" class="error-description">{{ error }}</span>
     </div>
   </div>
 </template>
@@ -63,7 +64,7 @@ watch(
   }
 }
 
-input {
+.input {
   color: $color-black;
   padding: $spacing-sm;
   font-size: $font-size-md;
@@ -92,8 +93,8 @@ input {
   }
 }
 
-.input-error {
-  margin: 0px;
+.error-description {
+  margin: 2px 0px 0px;
   line-height: normal;
   font-size: $font-size-sm;
   color: $color-error;

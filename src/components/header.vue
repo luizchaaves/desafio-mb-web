@@ -13,14 +13,14 @@ defineProps({
 </script>
 
 <template>
-  <header class="register-header-container">
+  <header class="header-container">
     <Steps v-if="step && totalSteps" :step="step" :totalSteps="totalSteps" />
     <Title :title="title" />
   </header>
 </template>
 
 <style lang="scss" scoped>
-.register-header-container {
+.header-container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;

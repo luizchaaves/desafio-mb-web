@@ -20,6 +20,7 @@ const props = defineProps({
 const emit = defineEmits(["click"])
 
 const buttonClasses = computed(() => ({
+  button: true,
   primary: props.color === "primary",
   secondary: props.color === "secondary",
   disabled: props.disabled,
@@ -43,7 +44,7 @@ const handleClick = () => {
 </template>
 
 <style lang="scss" scoped>
-button {
+.button {
   padding: $spacing-sm $spacing-md;
   border-radius: $border-radius-md;
   font-size: $font-size-sm;

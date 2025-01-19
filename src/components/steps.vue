@@ -12,17 +12,17 @@ defineProps({
 </script>
 
 <template>
-  <p>
-    Etapa <span>{{ step }}</span> de {{ totalSteps }}
+  <p class="step-progress">
+    Etapa <span class="step-curent">{{ step }}</span> de {{ totalSteps }}
   </p>
 </template>
 
 <style lang="scss" scoped>
-p {
+.step-progress {
   margin: 0px;
   font-weight: $font-weight-semibold;
 
-  span {
+  .step-curent {
     color: $color-orange;
   }
 }

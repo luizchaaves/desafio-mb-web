@@ -8,11 +8,11 @@ defineProps({
 </script>
 
 <template>
-  <h1>{{ title }}</h1>
+  <h1 class="title">{{ title }}</h1>
 </template>
 
 <style lang="scss" scoped>
-h1 {
+.title {
   font-size: $font-size-lg;
   line-height: normal;
   margin: 0px;

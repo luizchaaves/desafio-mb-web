@@ -10,7 +10,7 @@ const onSubmit = () => {
 </script>
 
 <template>
-  <form @submit.prevent="onSubmit">
+  <form @submit.prevent="onSubmit" class="form">
     <div class="form-content">
       <slot />
     </div>
@@ -21,7 +21,7 @@ const onSubmit = () => {
 </template>
 
 <style lang="scss" scoped>
-form {
+.form {
   display: flex;
   flex-direction: column;
   gap: $spacing-xl;
