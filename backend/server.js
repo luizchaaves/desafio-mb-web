@@ -16,7 +16,7 @@ const buildFrontend = async () => {
     console.log("Iniciando o build do frontend...")
 
     try {
-      await new Promise((resolve, reeject) => {
+      await new Promise((resolve, reject) => {
         exec("npm run build", { cwd: frontendDir }, (error, stdout, stderr) => {
           if (error) {
             reject(
