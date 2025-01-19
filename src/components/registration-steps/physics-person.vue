@@ -1,6 +1,11 @@
 <script setup>
-import { defineEmits, reactive } from "vue"
+import { computed, defineEmits, reactive } from "vue"
 import { formatDate, formatPhone, formatCpf } from "../../utils/masks"
+import {
+  validateCpf,
+  validateDate,
+  validatePhone,
+} from "../../utils/validators"
 import Form from "../form.vue"
 import Input from "../input.vue"
 import Button from "../button.vue"
@@ -14,11 +19,27 @@ const props = defineProps({
 
 const emit = defineEmits(["updateRegistrationData", "prevStep", "nextStep"])
 
+const formIsValid = computed(
+  () =>
+    Boolean(
+      formData.name && formData.cpf && formData.birthdate && formData.phone
+    ) &&
+    isValid.cpf &&
+    isValid.date &&
+    isValid.phone
+)
+
 const formData = reactive({
   name: props.registrationData.name,
   cpf: props.registrationData.cpf,
   birthdate: props.registrationData.birthdate,
   phone: props.registrationData.phone,
+})
+
+const isValid = reactive({
+  cpf: true,
+  date: true,
+  phone: true,
 })
 
 const handleCpf = () => (formData.cpf = formatCpf(formData.cpf))
@@ -27,9 +48,11 @@ const handleBirthdate = () =>
   (formData.birthdate = formatDate(formData.birthdate))
 
 const handleSubmit = () => {
-  const data = { ...formData, company: "", cnpj: "", openingDate: "" }
-  emit("updateRegistrationData", data)
-  emit("nextStep")
+  if (formIsValid.value) {
+    const data = { ...formData, company: "", cnpj: "", openingDate: "" }
+    emit("updateRegistrationData", data)
+    emit("nextStep")
+  }
 }
 
 const handleBack = () => {
@@ -39,6 +62,18 @@ const handleBack = () => {
   formData.phone = props.registrationData.phone
   emit("updateRegistrationData", formData)
   emit("prevStep")
+}
+
+const onChangeValidateCpf = () => {
+  isValid.cpf = validateCpf(formData.cpf)
+}
+
+const onChangeValidateDate = () => {
+  isValid.date = validateDate(formData.birthdate)
+}
+
+const onChangeValidatePhone = () => {
+  isValid.phone = validatePhone(formData.phone)
 }
 </script>
 
@@ -50,24 +85,32 @@ const handleBack = () => {
       type="text"
       :maxlength="14"
       inputmode="numeric"
+      :error="!isValid.cpf && formData.cpf ? 'cpf inválido' : ''"
       v-model="formData.cpf"
       @keyup="handleCpf"
+      @change="onChangeValidateCpf"
     />
     <Input
       label="Data de nascimento"
       type="text"
       :maxlength="10"
       inputmode="numeric"
+      :error="
+        !isValid.date && formData.birthdate ? 'data de nascimento inválida' : ''
+      "
       v-model="formData.birthdate"
       @keyup="handleBirthdate"
+      @change="onChangeValidateDate"
     />
     <Input
       label="Telefone"
       type="tel"
       :maxlength="15"
       inputmode="tel"
+      :error="!isValid.phone && formData.phone ? 'telefone inválido' : ''"
       v-model="formData.phone"
       @keyup="handlePhone"
+      @change="onChangeValidatePhone"
     />
 
     <template #buttons>
@@ -76,10 +119,14 @@ const handleBack = () => {
         stretched
         label="Voltar"
         color="secondary"
-        :disabled="false"
         @click="handleBack"
       />
-      <Button type="submit" stretched label="Continuar" :disabled="false" />
+      <Button
+        type="submit"
+        stretched
+        label="Continuar"
+        :disabled="!formIsValid"
+      />
     </template>
   </Form>
 </template>
