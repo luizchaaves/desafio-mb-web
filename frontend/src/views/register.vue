@@ -1,11 +1,19 @@
 <script setup>
-import { computed, onMounted, reactive, watch } from "vue"
+import { computed, onMounted, reactive, ref, watch } from "vue"
+import useRegistrationService from "../services/registration-service.js"
 import Header from "../components/header.vue"
 import Welcome from "../components/registration-steps/welcome.vue"
 import Password from "../components/registration-steps/password.vue"
 import JuridicPerson from "../components/registration-steps/juridic-person.vue"
 import PhysicsPerson from "../components/registration-steps/physics-person.vue"
 import Review from "../components/registration-steps/review.vue"
+import Dialog from "../components/dialog.vue"
+
+const registrationResponse = ref()
+const isDialogVisible = ref(false)
+const registrationIsSuccess = ref(false)
+
+const { createRegistration } = useRegistrationService()
 
 const storedData = computed(() =>
   JSON.parse(localStorage.getItem("mbResistrationData"))
@@ -56,11 +64,34 @@ const updateStoredSteps = () => {
   localStorage.setItem("mbResistrationSteps", JSON.stringify(steps))
 }
 
-const submitRegistration = () => {
-  steps.current = 1
-  Object.keys(registrationData).forEach((key) => {
-    registrationData[key] = ""
-  })
+const submitRegistration = async () => {
+  const response = await createRegistration(registrationData)
+
+  if (response.message) {
+    registrationIsSuccess.value = true
+    registrationResponse.value = response.message
+  } else if (response.error || response.errors) {
+    registrationIsSuccess.value = false
+    registrationResponse.value = response.error
+      ? [response.error]
+      : response.errors
+  } else {
+    registrationIsSuccess.value = false
+    registrationResponse.value = "Não foi possível realizar o cadastro"
+  }
+  isDialogVisible.value = true
+}
+
+const updateIsDialogVisible = () => {
+  if (registrationIsSuccess.value) {
+    steps.current = 1
+    Object.keys(registrationData).forEach((key) => {
+      registrationData[key] = ""
+    })
+    isDialogVisible.value = false
+  } else {
+    isDialogVisible.value = false
+  }
 }
 
 watch(registrationData, () => updateStoredData())
@@ -124,6 +155,24 @@ onMounted(() => {
         />
       </div>
     </div>
+    <Dialog
+      :isSuccess="isDialogVisible"
+      :isVisible="isDialogVisible"
+      @update:isVisible="updateIsDialogVisible"
+    >
+      <template #body>
+        <template v-if="Array.isArray(registrationResponse)">
+          <ul>
+            <li v-for="(error, index) in registrationResponse" :key="index">
+              {{ error }}
+            </li>
+          </ul>
+        </template>
+        <template v-else>
+          <span>{{ registrationResponse }}</span>
+        </template>
+      </template>
+    </Dialog>
   </section>
 </template>
 
