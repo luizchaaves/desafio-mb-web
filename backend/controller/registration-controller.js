@@ -3,7 +3,9 @@ const registrationController = (req, res) => {
     res.status(200).json({ message: "Cadastro realizado com sucesso!" })
   } catch (err) {
     console.log(err)
-    res.status(500).json({ error: "Erro interno no servidor" })
+    res
+      .status(err?.status || 500)
+      .json({ error: err?.message || "Erro interno no servidor" })
   }
 }
 
