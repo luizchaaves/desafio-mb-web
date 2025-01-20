@@ -26,7 +26,7 @@ const handleSubmit = () => {
   <Form @submit="handleSubmit">
     <Input
       label="Sua senha"
-      type="text"
+      type="password"
       v-model="props.registrationData.password"
     />
 

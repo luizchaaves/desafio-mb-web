@@ -231,7 +231,7 @@ const handleRegistration = () => {
 
     <Input
       label="Senha"
-      type="text"
+      type="password"
       v-model="props.registrationData.password"
     />
 

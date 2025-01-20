@@ -1,6 +1,8 @@
 <script setup>
 import { computed, ref, watch } from "vue"
 import { randomStringGenerator } from "../utils/helpers"
+import visibilityIcon from "../assets/visibility.svg"
+import visibilityOffIcon from "../assets/visibility_off.svg"
 
 const props = defineProps({
   id: {
@@ -24,9 +26,16 @@ const emit = defineEmits("update:modelValue")
 const inputClasses = computed(() => ({
   input: true,
   error: props.error,
+  password: props.type === "password",
 }))
 
+const inputType = ref(props.type)
+
 const model = ref(props.modelValue)
+
+const showPassword = () => {
+  inputType.value = inputType.value === "password" ? "text" : "password"
+}
 
 watch(
   () => props.modelValue,
@@ -40,10 +49,35 @@ watch(
   <div class="input-container">
     <label v-if="label" :for="id">{{ label }}</label>
     <div class="input-content">
+      <div v-if="type === 'password'" class="password-container">
+        <input
+          :type="inputType"
+          v-bind="$attrs"
+          :id="id"
+          v-model="model"
+          :class="inputClasses"
+        />
+        <img
+          v-if="inputType === 'password'"
+          :src="visibilityIcon"
+          alt="Ícone de visualizar senha"
+          class="eye-icon"
+          @click="showPassword"
+        />
+        <img
+          v-else
+          :src="visibilityOffIcon"
+          alt="Ícone de esconder senha"
+          class="eye-icon"
+          @click="showPassword"
+        />
+      </div>
+
       <input
+        v-else
         v-bind="$attrs"
         :id="id"
-        :type="type"
+        :type="inputType"
         v-model="model"
         :class="inputClasses"
       />
@@ -91,6 +125,25 @@ watch(
     box-shadow: none;
     border-color: rgba(118, 118, 118, 0.3);
   }
+}
+
+.password-container {
+  position: relative;
+}
+
+.password {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.eye-icon {
+  font-size: 20px;
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  cursor: pointer;
+  color: #666;
+  transform: translate(-50%, -50%);
 }
 
 .error-description {
