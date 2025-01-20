@@ -111,10 +111,10 @@ const registrationValidation = (req, res, next) => {
       .json({ error: "Corpo da requisição vazio. Dados são obrigatórios" })
   }
 
-  const validationErros = validateRegistration(req.body)
+  const validationErrors = validateRegistration(req.body)
 
-  if (validationErros.length) {
-    return res.status(400).json({ erros: validationErros })
+  if (validationErrors.length) {
+    return res.status(400).json({ errors: validationErrors })
   }
 
   next()
