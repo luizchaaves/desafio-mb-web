@@ -107,7 +107,7 @@ const closeDialog = () => {
   padding: 32px $spacing-lg $spacing-lg;
   max-height: 400px;
   overflow-y: auto;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .dialog-button {

@@ -13,8 +13,6 @@ const useRegistrationService = () => {
         body: JSON.stringify(formData),
       })
 
-      if (!response.ok) throw new Error("Falha ao tentar cadastrar")
-
       const data = await response.json()
       return data
     } catch (err) {

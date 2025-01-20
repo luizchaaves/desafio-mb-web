@@ -84,11 +84,11 @@ const submitRegistration = async () => {
 
 const updateIsDialogVisible = () => {
   if (registrationIsSuccess.value) {
+    isDialogVisible.value = false
     steps.current = 1
     Object.keys(registrationData).forEach((key) => {
       registrationData[key] = ""
     })
-    isDialogVisible.value = false
   } else {
     isDialogVisible.value = false
   }
@@ -156,13 +156,13 @@ onMounted(() => {
       </div>
     </div>
     <Dialog
-      :isSuccess="isDialogVisible"
+      :isSuccess="registrationIsSuccess"
       :isVisible="isDialogVisible"
       @update:isVisible="updateIsDialogVisible"
     >
       <template #body>
         <template v-if="Array.isArray(registrationResponse)">
-          <ul>
+          <ul class="dialog-body-list">
             <li v-for="(error, index) in registrationResponse" :key="index">
               {{ error }}
             </li>
@@ -204,5 +204,11 @@ onMounted(() => {
   @media (max-width: $breakpoint-mobile) {
     max-width: 100%;
   }
+}
+
+.dialog-body-list {
+  margin: 0px;
+  list-style-type: none;
+  padding: 0px;
 }
 </style>
