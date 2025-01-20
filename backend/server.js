@@ -2,6 +2,7 @@ const express = require("express")
 const path = require("path")
 const fs = require("fs")
 const { exec } = require("child_process")
+const cors = require("cors")
 
 const registrationValidation = require("./middleware/registration-middleware")
 const registrationController = require("./controller/registration-controller")
@@ -40,6 +41,7 @@ const buildFrontend = async () => {
 
 buildFrontend()
   .then(() => {
+    app.use(cors())
     app.use(express.json())
     app.use(express.static(distDir))
 
