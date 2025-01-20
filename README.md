@@ -83,3 +83,8 @@ Com o backend rodando, acesse o formulário de cadastro no seu navegador atravé
 ```bash
 http://localhost:3000/registration
 ```
+
+### Links:
+
+- **[Frontend - Documentação](frontend/README.md)**: Este link leva diretamente à documentação do **frontend**, localizada na pasta `frontend/`.
+- **[Backend - Documentação](backend/README.md)**: Este link leva diretamente à documentação do **backend**, localizada na pasta `backend/`.
